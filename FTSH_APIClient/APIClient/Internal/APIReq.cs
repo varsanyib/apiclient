@@ -87,27 +87,32 @@ namespace APIClient.Internal
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async void Get(string name, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "GET", (url + route));
-            answer.StartTimer();
-
-            using (HttpClient client = new HttpClient())
+            string fullUrl = url + route;
+            if (fullUrl.Length != 0)
             {
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
-                HttpResponseMessage response = await client.GetAsync((url + route));
-                
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), content);
-                }
-                else
-                {
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
-                }
-            }
+                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "GET", (url + route));
+                answer.StartTimer();
 
-            answer.StopTimer();
-            answers.Add(answer);
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
+                    HttpResponseMessage response = await client.GetAsync((url + route));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    }
+                    else
+                    {
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
+                    }
+                }
+
+                answer.StopTimer();
+                answers.Add(answer);
+            }
+            
         }
         #endregion
         #region POST
@@ -119,27 +124,31 @@ namespace APIClient.Internal
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async void Post(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "POST", (url + route));
-            answer.StartTimer();
-
-            using (HttpClient client = new HttpClient())
+            string fullUrl = url + route;
+            if (fullUrl.Length != 0)
             {
-                var valuesForm = new FormUrlEncodedContent(values);
-                HttpResponseMessage response = await client.PostAsync((url + route), valuesForm);
+                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "POST", (url + route));
+                answer.StartTimer();
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    var valuesForm = new FormUrlEncodedContent(values);
+                    HttpResponseMessage response = await client.PostAsync((url + route), valuesForm);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    }
+                    else
+                    {
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
+                    }
                 }
-                else
-                {
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
-                }
+
+                answer.StopTimer();
+                answers.Add(answer);
             }
-
-            answer.StopTimer();
-            answers.Add(answer);
         }
         #endregion
         #region PUT
@@ -151,27 +160,31 @@ namespace APIClient.Internal
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async void Put(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PUT", (url + route));
-            answer.StartTimer();
-
-            using (HttpClient client = new HttpClient())
+            string fullUrl = url + route;
+            if (fullUrl.Length != 0)
             {
-                var valuesForm = new FormUrlEncodedContent(values);
-                HttpResponseMessage response = await client.PutAsync((url + route), valuesForm);
+                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PUT", (url + route));
+                answer.StartTimer();
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    var valuesForm = new FormUrlEncodedContent(values);
+                    HttpResponseMessage response = await client.PutAsync((url + route), valuesForm);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    }
+                    else
+                    {
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
+                    }
                 }
-                else
-                {
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
-                }
+
+                answer.StopTimer();
+                answers.Add(answer);
             }
-
-            answer.StopTimer();
-            answers.Add(answer);
         }
         #endregion
         #region PATCH
@@ -183,27 +196,32 @@ namespace APIClient.Internal
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async void Patch(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PATCH", (url + route));
-            answer.StartTimer();
-
-            using (HttpClient client = new HttpClient())
+            string fullUrl = url + route;
+            if (fullUrl.Length != 0)
             {
-                var valuesForm = new FormUrlEncodedContent(values);
-                HttpResponseMessage response = await client.PatchAsync((url + route), valuesForm);
+                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PATCH", (url + route));
+                answer.StartTimer();
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    var valuesForm = new FormUrlEncodedContent(values);
+                    HttpResponseMessage response = await client.PatchAsync((url + route), valuesForm);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    }
+                    else
+                    {
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
+                    }
                 }
-                else
-                {
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
-                }
+
+                answer.StopTimer();
+                answers.Add(answer);
             }
 
-            answer.StopTimer();
-            answers.Add(answer);
         }
         #endregion
         #region DELETE
@@ -214,27 +232,31 @@ namespace APIClient.Internal
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async void Delete(string name, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "DELETE", (url + route));
-            answer.StartTimer();
-
-            using (HttpClient client = new HttpClient())
+            string fullUrl = url + route;
+            if (fullUrl.Length != 0)
             {
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
-                HttpResponseMessage response = await client.DeleteAsync((url + route));
+                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "DELETE", (url + route));
+                answer.StartTimer();
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
+                    HttpResponseMessage response = await client.DeleteAsync((url + route));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), content);
+                    }
+                    else
+                    {
+                        answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
+                    }
                 }
-                else
-                {
-                    answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
-                }
+
+                answer.StopTimer();
+                answers.Add(answer);
             }
-
-            answer.StopTimer();
-            answers.Add(answer);
         }
         #endregion
         #endregion
