@@ -20,7 +20,7 @@ namespace APIClient.Internal
         /// <summary>
         /// Lefutott lekérdezések listája.
         /// </summary>
-        private List<APIAnswer> answers = new List<APIAnswer>();
+        public List<APIAnswer> Answers { get; private set; } = new List<APIAnswer>();
         #endregion
         #region Methods - Properties
         /// <summary>
@@ -61,7 +61,7 @@ namespace APIClient.Internal
         /// Visszaadja a tárolt lekérdezések számát.
         /// </summary>
         /// <returns>Tárolt lekérdezések száma</returns>
-        public int AnswersCount() { return this.answers.Count; }
+        public int AnswersCount() { return this.Answers.Count; }
         #endregion
         #region Constructors
         /// <summary>
@@ -81,21 +81,20 @@ namespace APIClient.Internal
         #region Methods - Requests
         #region GET
         /// <summary>
-        /// GET lekérdezés indítása a beállított paraméterekkel
+        /// GET lekérdezés indítása a beállított paraméterekkel.
         /// </summary>
         /// <param name="name">Lekérdezés rövid megnevezése</param>
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
-        public async void Get(string name, string route = "")
+        public async Task<APIAnswer> Get(string name, string route = "")
         {
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "GET", (url + route));
+            answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
             {
-                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "GET", (url + route));
-                answer.StartTimer();
-
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     HttpResponseMessage response = await client.GetAsync((url + route));
 
                     if (response.IsSuccessStatusCode)
@@ -110,28 +109,31 @@ namespace APIClient.Internal
                 }
 
                 answer.StopTimer();
-                answers.Add(answer);
+                Answers.Add(answer);
             }
-            
+            return answer;
+
+
         }
         #endregion
         #region POST
         /// <summary>
-        /// POST lekérdezés indítása a beállított paraméterekkel
+        /// POST lekérdezés indítása a beállított paraméterekkel.
         /// </summary>
         /// <param name="name">Lekérdezés rövid megnevezése</param>
         /// <param name="values">Form kulcs-érték párok megadása</param>
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
-        public async void Post(string name, Dictionary<string, string> values, string route = "")
+        /// <returns>Választ és technikai információkat tartalmazó példány</returns>
+        public async Task<APIAnswer> Post(string name, Dictionary<string, string> values, string route = "")
         {
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "POST", (url + route));
+            answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
             {
-                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "POST", (url + route));
-                answer.StartTimer();
-
                 using (HttpClient client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     var valuesForm = new FormUrlEncodedContent(values);
                     HttpResponseMessage response = await client.PostAsync((url + route), valuesForm);
 
@@ -147,27 +149,29 @@ namespace APIClient.Internal
                 }
 
                 answer.StopTimer();
-                answers.Add(answer);
+                Answers.Add(answer);
             }
+            return answer;
         }
         #endregion
         #region PUT
         /// <summary>
-        /// PUT lekérdezés indítása a beállított paraméterekkel
+        /// PUT lekérdezés indítása a beállított paraméterekkel.
         /// </summary>
         /// <param name="name">Lekérdezés rövid megnevezése</param>
         /// <param name="values">Form kulcs-érték párok megadása</param>
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
-        public async void Put(string name, Dictionary<string, string> values, string route = "")
+        /// <returns>Választ és technikai információkat tartalmazó példány</returns>
+        public async Task<APIAnswer> Put(string name, Dictionary<string, string> values, string route = "")
         {
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PUT", (url + route));
+            answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
             {
-                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PUT", (url + route));
-                answer.StartTimer();
-
                 using (HttpClient client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     var valuesForm = new FormUrlEncodedContent(values);
                     HttpResponseMessage response = await client.PutAsync((url + route), valuesForm);
 
@@ -183,27 +187,29 @@ namespace APIClient.Internal
                 }
 
                 answer.StopTimer();
-                answers.Add(answer);
+                Answers.Add(answer);
             }
+            return answer;
         }
         #endregion
         #region PATCH
         /// <summary>
-        /// PATCH lekérdezés indítása a beállított paraméterekkel
+        /// PATCH lekérdezés indítása a beállított paraméterekkel.
         /// </summary>
         /// <param name="name">Lekérdezés rövid megnevezése</param>
         /// <param name="values">Form kulcs-érték párok megadása</param>
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
-        public async void Patch(string name, Dictionary<string, string> values, string route = "")
+        /// <returns>Választ és technikai információkat tartalmazó példány</returns>
+        public async Task<APIAnswer> Patch(string name, Dictionary<string, string> values, string route = "")
         {
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PATCH", (url + route));
+            answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
             {
-                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PATCH", (url + route));
-                answer.StartTimer();
-
                 using (HttpClient client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     var valuesForm = new FormUrlEncodedContent(values);
                     HttpResponseMessage response = await client.PatchAsync((url + route), valuesForm);
 
@@ -219,28 +225,28 @@ namespace APIClient.Internal
                 }
 
                 answer.StopTimer();
-                answers.Add(answer);
+                Answers.Add(answer);
             }
-
+            return answer;
         }
         #endregion
         #region DELETE
         /// <summary>
-        /// DELETE lekérdezés indítása a beállított paraméterekkel
+        /// DELETE lekérdezés indítása a beállított paraméterekkel.
         /// </summary>
         /// <param name="name">Lekérdezés rövid megnevezése</param>
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
-        public async void Delete(string name, string route = "")
+        /// <returns>Választ és technikai információkat tartalmazó példány</returns>
+        public async Task<APIAnswer> Delete(string name, string route = "")
         {
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "DELETE", (url + route));
+            answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
             {
-                APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "DELETE", (url + route));
-                answer.StartTimer();
-
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH API Client", GetVersion()));
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     HttpResponseMessage response = await client.DeleteAsync((url + route));
 
                     if (response.IsSuccessStatusCode)
@@ -255,8 +261,9 @@ namespace APIClient.Internal
                 }
 
                 answer.StopTimer();
-                answers.Add(answer);
+                Answers.Add(answer);
             }
+            return answer;
         }
         #endregion
         #endregion

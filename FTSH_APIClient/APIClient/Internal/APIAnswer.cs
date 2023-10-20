@@ -76,15 +76,20 @@ namespace APIClient.Internal
             AnswerText = answertext;
             Closed = true;
         }
+        /// <summary>
+        /// Visszaadja a lekérdezés eredményét a technikai információkkal együtt.
+        /// </summary>
+        /// <returns>Lekérdezés eredménye szöveges típusban</returns>
         public string GetResult()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("FTSH APIClient");
-            sb.AppendLine("Azonosító:\t" + Id);
-            sb.AppendLine("Megnevezés:\t" + Name);
-            sb.AppendLine("Típus:\t" + Method);
-            sb.AppendLine("Elérési út:\t" + Route);
-            if (Values.Count != 0)
+            sb.AppendLine("\n---\n");
+            sb.AppendLine("FTSH APIClient - lekérdezés eredménye:");
+            sb.AppendLine("Azonosító: " + Id);
+            sb.AppendLine("Megnevezés: " + Name);
+            sb.AppendLine("Típus: " + Method);
+            sb.AppendLine("Elérési út: " + Route);
+            if (Values != null && Values.Count != 0)
             {
                 sb.AppendLine("Hozzáadott értékek: ");
                 foreach (var item in Values)
@@ -94,26 +99,27 @@ namespace APIClient.Internal
             }
             if (StartTime != DateTime.MinValue)
             {
-                sb.AppendLine("Indítás időpontja:\t" + StartTime.ToString());
+                sb.AppendLine("Indítás időpontja: " + StartTime.ToString());
             }
 
             if (Closed)
             {
                 if (EndTime != DateTime.MinValue)
                 {
-                    sb.AppendLine("Lezárás időpontja:\t" + EndTime.ToString());
+                    sb.AppendLine("Lezárás időpontja: " + EndTime.ToString());
                 }
                 if (ElapsedTime() != TimeSpan.Zero)
                 {
-                    sb.AppendLine("Eltelt idő:\t" + ElapsedTime().ToString());
+                    sb.AppendLine("Eltelt idő: " + ElapsedTime().ToString());
                 }
-                sb.AppendLine("Státuszkód:\t" + Code);
-                sb.AppendLine("\nEredmény:");
+                sb.AppendLine("Státuszkód: " + Code);
+                sb.AppendLine("\nEredmény:\n");
                 sb.AppendLine(AnswerText);
+                sb.AppendLine("\n---");
             }
             else
             {
-                sb.AppendLine("Információ:\tA lekérdezés még nem került lezárásra!");
+                sb.AppendLine("Információ: A lekérdezés még nem került lezárásra!");
             }
 
             return sb.ToString();
