@@ -1,6 +1,7 @@
 ﻿using APIClient.Internal;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Threading.Channels;
 
 namespace APIClient
 {
@@ -11,54 +12,57 @@ namespace APIClient
         static void Main(string[] args)
         {
             req = new APIReq();
+            ProgramCycle();
 
-            
-            while (run) {
+        }
 
+        private static void ProgramCycle()
+        {
+            while (run)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkBlue;
                 Console.Clear();
                 AppName();
-
                 if (req.CheckUrl())
                 {
                     Console.WriteLine("\nBeállított alapértelmezett elérési útvonal: " + req.GetUrl());
                 }
-
                 Menu();
                 byte selected = Selector();
-                OperationsCenter(selected);
-
+                SwitcherAsync(selected).Wait(); //awaitable
+                PressKey();
             }
-            
-
         }
 
-        private static void OperationsCenter(byte sel)
+        private static async Task SwitcherAsync(byte selected)
         {
-            switch (sel)
+            switch (selected)
             {
                 case 1:
                     SetURL();
                     break;
                 case 2:
-                    GetReq();
+                    await GetReq();
                     break;
                 case 3:
-                    PostReq();
+                    await PostReq();
                     break;
                 case 4:
-                    PutReq();
+                    await PutReq();
                     break;
                 case 5:
-                    PatchReq();
+                    await PatchReq();
                     break;
                 case 6:
-                    DeleteReq();
+                    await DeleteReq();
                     break;
                 case 7:
-                    ReqListView();
+                    //ReqListView();
+                    Console.WriteLine("Nincs implementálva");
                     break;
                 case 8:
-                    DelReqList();
+                    //DelReqList();
+                    Console.WriteLine("Nincs implementálva");
                     break;
                 case 9:
                     Exit();
@@ -68,34 +72,104 @@ namespace APIClient
                     Exit();
                     break;
             }
+            
         }
-        #region API Operations
-        private static void DeleteReq()
+        #region Async API operations
+        private static async Task DeleteReq()
         {
-            Console.WriteLine("Fejlesztés alatt!");
+            Console.Write("Adja meg a lekérdezés megnevezését: ");
+            string nev = Console.ReadLine() ?? "Lekérdezés";
+            Console.Write("Adja meg a teljes elérési utat: " + req.GetUrl());
+            string route = Console.ReadLine() ?? "";
+            APIAnswer a = await req.Get(nev, route);
+            await Console.Out.WriteLineAsync(a.GetResult());
+        }
+        private static async Task PatchReq()
+        {
+            Console.Write("Adja meg a lekérdezés megnevezését: ");
+            string nev = Console.ReadLine() ?? "Lekérdezés";
+            Console.Write("Adja meg a teljes elérési utat: " + req.GetUrl());
+            string route = Console.ReadLine() ?? "";
+            Console.Write("Adja meg, hogy hány darab kulcs-érték párat szeretne hozzáadni a lekérdezéshez: ");
+            int x = 0;
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            string tmp;
+            bool success = int.TryParse(Console.ReadLine(), out x);
+            if (success)
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    Console.Write($"{i + 1}. kulcs:");
+                    tmp = Console.ReadLine() ?? "";
+                    Console.Write($"{i + 1}. érték:");
+                    values.Add(tmp, Console.ReadLine() ?? "");
+                    Console.WriteLine();
+                }
+            }
+            APIAnswer a = await req.Patch(nev, values, route);
+            await Console.Out.WriteLineAsync(a.GetResult());
+        }
+        private static async Task PutReq()
+        {
+            Console.Write("Adja meg a lekérdezés megnevezését: ");
+            string nev = Console.ReadLine() ?? "Lekérdezés";
+            Console.Write("Adja meg a teljes elérési utat: " + req.GetUrl());
+            string route = Console.ReadLine() ?? "";
+            Console.Write("Adja meg, hogy hány darab kulcs-érték párat szeretne hozzáadni a lekérdezéshez: ");
+            int x = 0;
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            string tmp;
+            bool success = int.TryParse(Console.ReadLine(), out x);
+            if (success)
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    Console.Write($"{i + 1}. kulcs:");
+                    tmp = Console.ReadLine() ?? "";
+                    Console.Write($"{i + 1}. érték:");
+                    values.Add(tmp, Console.ReadLine() ?? "");
+                    Console.WriteLine();
+                }
+            }
+            APIAnswer a = await req.Put(nev, values, route);
+            await Console.Out.WriteLineAsync(a.GetResult());
+        }
+        private static async Task PostReq()
+        {
+            Console.Write("Adja meg a lekérdezés megnevezését: ");
+            string nev = Console.ReadLine() ?? "Lekérdezés";
+            Console.Write("Adja meg a teljes elérési utat: " + req.GetUrl());
+            string route = Console.ReadLine() ?? "";
+            Console.Write("Adja meg, hogy hány darab kulcs-érték párat szeretne hozzáadni a lekérdezéshez: ");
+            int x = 0;
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            string tmp;
+            bool success = int.TryParse(Console.ReadLine(), out x);
+            if (success)
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    Console.Write($"{i+1}. kulcs:");
+                    tmp = Console.ReadLine() ?? "";
+                    Console.Write($"{i + 1}. érték:");
+                    values.Add(tmp, Console.ReadLine() ?? "");
+                    Console.WriteLine();
+                }
+            }
+            APIAnswer a = await req.Post(nev, values, route);
+            await Console.Out.WriteLineAsync(a.GetResult());
         }
 
-        private static void PatchReq()
+        private static async Task GetReq()
         {
-            Console.WriteLine("Fejlesztés alatt!");
-        }
-
-        private static void PutReq()
-        {
-            Console.WriteLine("Fejlesztés alatt!");
-        }
-
-        private static void PostReq()
-        {
-            Console.WriteLine("Fejlesztés alatt!");
-        }
-
-        private static void GetReq()
-        {
-            Console.WriteLine("Fejlesztés alatt!");
+            Console.Write("Adja meg a lekérdezés megnevezését: ");
+            string nev = Console.ReadLine() ?? "Lekérdezés";
+            Console.Write("Adja meg a teljes elérési út végét: " + req.GetUrl());
+            string route = Console.ReadLine() ?? "";
+            APIAnswer a = await req.Get(nev, route);
+            await Console.Out.WriteLineAsync(a.GetResult());
         }
         #endregion
-
         #region App preferences
         private static void SetURL()
         {
@@ -108,7 +182,6 @@ namespace APIClient
 
             req.SetUrl(url);
             Console.WriteLine($"\nAz elérési útvonal sikeresen beállítva! ({req.GetUrl()})");
-            PressKey();
         }
         private static void Exit()
         {
