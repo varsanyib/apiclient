@@ -10,6 +10,8 @@
     <Title>FTSH API Client</Title>
     <Copyright>FTSH</Copyright>
     <PackageProjectUrl>https://felx.hu</PackageProjectUrl>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

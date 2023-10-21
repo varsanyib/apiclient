@@ -132,7 +132,15 @@ namespace FTSH_APIManager
                 }
                 sb.AppendLine("Státuszkód: " + Code);
                 sb.AppendLine("\nEredmény:\n");
-                sb.AppendLine(PrettyJson(AnswerText));
+                try
+                {
+                    sb.AppendLine(PrettyJson(AnswerText));
+                }
+                catch (Exception)
+                {
+                    sb.AppendLine("A válaszként kapott adat nem JSON formátumú!\n");
+                    sb.AppendLine(AnswerText);
+                }
                 sb.AppendLine("\n---");
             }
             else
