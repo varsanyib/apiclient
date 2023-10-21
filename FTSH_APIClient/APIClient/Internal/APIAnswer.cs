@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace APIClient.Internal
 {
@@ -47,25 +48,12 @@ namespace APIClient.Internal
         /// Lekérdezés lezárt állapota
         /// </summary>
         public bool Closed { get; private set; } = false;
+        /// <summary>
+        /// Lekérdezés JSON formátumban
+        /// </summary>
+        public JObject AnswerJson { get; private set; }
         #endregion
         #region Methods
-        /// <summary>
-        /// Átalakítja a kinyert adatot, JSON formátumba
-        /// </summary>
-        /// <param name="unPrettyJson">Nyers szöveg</param>
-        /// <returns>JSON formátumba tagolt szöveg</returns>
-        public string PrettyJson(string unPrettyJson)
-        {
-            //https://stackoverflow.com/a/63560258/21669857
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            };
-
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
-
-            return JsonSerializer.Serialize(jsonElement, options);
-        }
         /// <summary>
         /// Beállítja a válaszadás kezdő időpontját
         /// </summary>
@@ -88,10 +76,25 @@ namespace APIClient.Internal
         {
             return EndTime - StartTime;
         }
+        /// <summary>
+        /// Feltölti a hiányzó adatokat a lekérdezést követően, illetve lezárja a jelenlegi kérést.
+        /// </summary>
+        /// <param name="code">HTTP Státuszkód</param>
+        /// <param name="answertext">Lekérdezett adat szöveges típusban</param>
         public void SetResult(int code, string answertext)
         {
             Code = code;
             AnswerText = answertext;
+
+            try
+            {
+                AnswerJson = JObject.Parse(AnswerText);
+            }
+            catch (Exception ex)
+            {
+                AnswerJson = JObject.Parse("{\"appError\":\""+ex.Message+"\",\"code\":"+code+"}");
+            }
+            
             Closed = true;
         }
         /// <summary>
@@ -134,7 +137,7 @@ namespace APIClient.Internal
                 sb.AppendLine("\nEredmény:\n");
                 try
                 {
-                    sb.AppendLine(PrettyJson(AnswerText));
+                    sb.AppendLine(JsonConvert.SerializeObject(AnswerJson, Formatting.Indented));
                 }
                 catch (Exception)
                 {

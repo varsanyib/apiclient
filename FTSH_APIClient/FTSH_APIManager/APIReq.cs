@@ -38,14 +38,14 @@ namespace FTSH_APIManager
         /// Beállítja a szerver elérhetőségét.
         /// </summary>
         /// <param name="url">Szerver címe</param>
-        public void SetUrl(string url) 
+        public void SetUrl(string url)
         {
             this.url = url;
             if (this.url[this.url.Length - 1] != '/')
             {
                 this.url += '/';
             }
-            
+
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace FTSH_APIManager
         /// <param name="route">Opcionális: Elérési útvonal kiegészítés</param>
         public async Task<APIAnswer> Get(string name, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "GET", (url + route));
+            APIAnswer answer = new APIAnswer(new Random().Next(0, 2000), name, "GET", (url + route));
             answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
@@ -122,7 +122,7 @@ namespace FTSH_APIManager
         /// <returns>Választ és technikai információkat tartalmazó példány</returns>
         public async Task<APIAnswer> Post(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "POST", (url + route));
+            APIAnswer answer = new APIAnswer(new Random().Next(2000, 4000), name, "POST", (url + route));
             answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
@@ -159,7 +159,7 @@ namespace FTSH_APIManager
         /// <returns>Választ és technikai információkat tartalmazó példány</returns>
         public async Task<APIAnswer> Put(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PUT", (url + route));
+            APIAnswer answer = new APIAnswer(new Random().Next(4000, 6000), name, "PUT", (url + route));
             answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
@@ -196,7 +196,7 @@ namespace FTSH_APIManager
         /// <returns>Választ és technikai információkat tartalmazó példány</returns>
         public async Task<APIAnswer> Patch(string name, Dictionary<string, string> values, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "PATCH", (url + route));
+            APIAnswer answer = new APIAnswer(new Random().Next(6000, 8000), name, "PATCH", (url + route));
             answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
@@ -232,7 +232,7 @@ namespace FTSH_APIManager
         /// <returns>Választ és technikai információkat tartalmazó példány</returns>
         public async Task<APIAnswer> Delete(string name, string route = "")
         {
-            APIAnswer answer = new APIAnswer(new Random().Next(0, 1000), name, "DELETE", (url + route));
+            APIAnswer answer = new APIAnswer(new Random().Next(8000, 9999), name, "DELETE", (url + route));
             answer.StartTimer();
             string fullUrl = url + route;
             if (fullUrl.Length != 0)
