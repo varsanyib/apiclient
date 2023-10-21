@@ -96,7 +96,6 @@ namespace APIClient.Internal
                 {
                     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("FTSH_API_Client", GetVersion()));
                     HttpResponseMessage response = await client.GetAsync((url + route));
-
                     if (response.IsSuccessStatusCode)
                     {
                         string content = await response.Content.ReadAsStringAsync();
@@ -107,13 +106,10 @@ namespace APIClient.Internal
                         answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
                     }
                 }
-
                 answer.StopTimer();
                 Answers.Add(answer);
             }
             return answer;
-
-
         }
         #endregion
         #region POST
@@ -147,7 +143,6 @@ namespace APIClient.Internal
                         answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
                     }
                 }
-
                 answer.StopTimer();
                 Answers.Add(answer);
             }
@@ -185,7 +180,6 @@ namespace APIClient.Internal
                         answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
                     }
                 }
-
                 answer.StopTimer();
                 Answers.Add(answer);
             }
@@ -223,7 +217,6 @@ namespace APIClient.Internal
                         answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
                     }
                 }
-
                 answer.StopTimer();
                 Answers.Add(answer);
             }
@@ -259,7 +252,6 @@ namespace APIClient.Internal
                         answer.SetResult(Convert.ToInt32(response.StatusCode), answer.Id + ". lekérdezés sikertelen!");
                     }
                 }
-
                 answer.StopTimer();
                 Answers.Add(answer);
             }

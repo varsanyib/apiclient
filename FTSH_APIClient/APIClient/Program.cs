@@ -13,20 +13,15 @@ namespace APIClient
         {
             req = new APIReq();
             ProgramCycle();
-
         }
-
         private static void ProgramCycle()
         {
             while (run)
             {
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                //Console.BackgroundColor = ConsoleColor.DarkBlue;
                 Console.Clear();
                 AppName();
-                if (req.CheckUrl())
-                {
-                    Console.WriteLine("\nBeállított alapértelmezett elérési útvonal: " + req.GetUrl());
-                }
+                if (req.CheckUrl()) Console.WriteLine("\nBeállított alapértelmezett elérési útvonal: " + req.GetUrl());
                 Menu();
                 byte selected = Selector();
                 SwitcherAsync(selected).Wait(); //awaitable
@@ -36,6 +31,8 @@ namespace APIClient
 
         private static async Task SwitcherAsync(byte selected)
         {
+            Console.Clear();
+            AppName();
             switch (selected)
             {
                 case 1:
@@ -57,12 +54,10 @@ namespace APIClient
                     await DeleteReq();
                     break;
                 case 7:
-                    //ReqListView();
-                    Console.WriteLine("Nincs implementálva");
+                    ReqListView();
                     break;
                 case 8:
-                    //DelReqList();
-                    Console.WriteLine("Nincs implementálva");
+                    DelReqList();
                     break;
                 case 9:
                     Exit();
@@ -81,7 +76,7 @@ namespace APIClient
             string nev = Console.ReadLine() ?? "Lekérdezés";
             Console.Write("Adja meg a teljes elérési utat: " + req.GetUrl());
             string route = Console.ReadLine() ?? "";
-            APIAnswer a = await req.Get(nev, route);
+            APIAnswer a = await req.Delete(nev, route);
             await Console.Out.WriteLineAsync(a.GetResult());
         }
         private static async Task PatchReq()
@@ -99,11 +94,10 @@ namespace APIClient
             {
                 for (int i = 0; i < x; i++)
                 {
-                    Console.Write($"{i + 1}. kulcs:");
+                    Console.Write($"{i + 1}. kulcs: ");
                     tmp = Console.ReadLine() ?? "";
-                    Console.Write($"{i + 1}. érték:");
+                    Console.Write($"{i + 1}. érték: ");
                     values.Add(tmp, Console.ReadLine() ?? "");
-                    Console.WriteLine();
                 }
             }
             APIAnswer a = await req.Patch(nev, values, route);
@@ -124,11 +118,10 @@ namespace APIClient
             {
                 for (int i = 0; i < x; i++)
                 {
-                    Console.Write($"{i + 1}. kulcs:");
+                    Console.Write($"{i + 1}. kulcs: ");
                     tmp = Console.ReadLine() ?? "";
-                    Console.Write($"{i + 1}. érték:");
+                    Console.Write($"{i + 1}. érték: ");
                     values.Add(tmp, Console.ReadLine() ?? "");
-                    Console.WriteLine();
                 }
             }
             APIAnswer a = await req.Put(nev, values, route);
@@ -149,11 +142,10 @@ namespace APIClient
             {
                 for (int i = 0; i < x; i++)
                 {
-                    Console.Write($"{i+1}. kulcs:");
+                    Console.Write($"{i + 1}. kulcs: ");
                     tmp = Console.ReadLine() ?? "";
-                    Console.Write($"{i + 1}. érték:");
+                    Console.Write($"{i + 1}. érték: ");
                     values.Add(tmp, Console.ReadLine() ?? "");
-                    Console.WriteLine();
                 }
             }
             APIAnswer a = await req.Post(nev, values, route);
@@ -177,7 +169,7 @@ namespace APIClient
             do
             {
                 Console.Write("Kérem adja meg az elérési utat: ");
-                url = Console.ReadLine();
+                url = Console.ReadLine() ?? "";
             } while (url.Length == 0);
 
             req.SetUrl(url);
@@ -185,23 +177,49 @@ namespace APIClient
         }
         private static void Exit()
         {
+            Console.WriteLine("Viszlát!");
             run = false;
         }
 
         private static void DelReqList()
         {
-            throw new NotImplementedException();
+            Console.Write($"Biztosan törölni szeretné, a(z) {req.AnswersCount()} db elemet? (i/n): ");
+            if ((Console.ReadLine() ?? "N").ToUpper() == "I")
+            {
+                req.Answers.Clear();
+                Console.WriteLine("Sikeres törlés!");
+            }
+
         }
 
         private static void ReqListView()
         {
-            throw new NotImplementedException();
+            if (req.AnswersCount() != 0)
+            {
+                Console.WriteLine("Tárolt lekérdezések listája:\n");
+                foreach (APIAnswer answer in req.Answers)
+                {
+                    Console.WriteLine($"{answer.Id}. {answer.Name} ({answer.StartTime.ToString()})");
+                }
+
+                Console.Write("\nMelyik lekérdezést szeretné visszanézni? ");
+                int find = 0;
+                int.TryParse(Console.ReadLine(), out find);
+                APIAnswer ans = req.Answers.Where(x => x.Id.Equals(find)).First();
+                Console.WriteLine(ans.GetResult());
+
+                if (ans == null) Console.WriteLine("Nincs ilyen azonosítóval ellátott lekérdezés!");
+            }
+            else
+            {
+                Console.WriteLine("Jelenleg nincs eltárolt lekérdezés!");
+            }
         }
         #endregion
         #region Control
         private static void PressKey()
         {
-            Console.Write("\nKérem nyomjon egy billentyűt a folytatáshoz...");
+            Console.Write("\nKérem nyomjon meg egy billentyűt a folytatáshoz...");
             Console.ReadKey();
         }
         private static byte Selector()
@@ -226,7 +244,7 @@ namespace APIClient
             Console.WriteLine("[4] - PUT lekérdezés indítása");
             Console.WriteLine("[5] - PATCH lekérdezés indítása");
             Console.WriteLine("[6] - DELETE lekérdezés indítása");
-            Console.WriteLine("[7] - Tárolt lekérdezések eredményeinek visszahívása");
+            Console.WriteLine("[7] - Tárolt lekérdezések megtekintése");
             Console.WriteLine("[8] - Tárolt lekérdezések törlése");
             Console.WriteLine("[9] - Kilépés");
             Console.WriteLine();
