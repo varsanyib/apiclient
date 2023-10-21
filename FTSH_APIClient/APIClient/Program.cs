@@ -12,6 +12,7 @@ namespace APIClient
         static void Main(string[] args)
         {
             req = new APIReq();
+            Console.Title = $"FTSH API Client (v{req.GetVersion()})";
             ProgramCycle();
         }
         private static void ProgramCycle()
