@@ -7,7 +7,7 @@ Konzolos alkalmazás REST API tesztelésére
 ![image](https://github.com/varsanyib/apiclient/assets/109478771/82c42ece-a98c-4bbc-917f-4052680d15e4)
 - Az Install gombra kattintva feltelepül, majd elindul az alkalmazás.
 
-- #### Linux és Mac OS rendszereken
+#### Linux és Mac OS rendszereken
 - A `portable` mappában található dll fájlok és a `dotnet` keretrendszer telepítésével futtatható az állomány.
 
 ## Működése
@@ -46,3 +46,6 @@ Konzolos alkalmazás REST API tesztelésére
 
 ##### 9. Kilépés
 - Bezárja az alkalmazást.
+
+## DLL
+- Az APIReq osztály tartalmazza a lekérdezések kezelését, az APIAnswer osztály bevonásával történik a kiértékelés és adatok kihasználhatósága.
