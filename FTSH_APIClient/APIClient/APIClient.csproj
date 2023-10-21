@@ -5,6 +5,15 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>v01itwhite_rovid.ico</ApplicationIcon>
+    <PackageId>FTSH $(AssemblyName)</PackageId>
+    <Title>FTSH API Client</Title>
+    <Copyright>FTSH</Copyright>
+    <PackageProjectUrl>https://felx.hu</PackageProjectUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="v01itwhite_rovid.ico" />
+  </ItemGroup>
 
 </Project>
