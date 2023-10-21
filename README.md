@@ -4,7 +4,8 @@ Konzolos alkalmazás REST API tesztelésére
 ## Telepítés
 #### Windows rendszeren
 - Az `ms_installer` mappában található setup.exe elindításával, megjelenik a ClickOnce telepítő.
-![image](https://github.com/varsanyib/apiclient/assets/109478771/82c42ece-a98c-4bbc-917f-4052680d15e4)
+![image](https://github.com/varsanyib/apiclient/assets/109478771/0ff34c01-1d54-401d-9911-504707202165)
+
 - Az Install gombra kattintva feltelepül, majd elindul az alkalmazás.
 
 #### Linux és Mac OS rendszereken
