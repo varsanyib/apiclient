@@ -8,8 +8,14 @@ Konzolos alkalmazás REST API tesztelésére
 
 - Az Install gombra kattintva feltelepül, majd elindul az alkalmazás.
 
-#### Linux és Mac OS rendszereken
+## Futtatás
+#### Windows ClickOnce által telepített verzió
+- Indítás az asztalra kihelyezett parancsikonnal vagy (Windows 10 / 11 esetén) a Start menüből.
+#### Windows, Linux és Mac OS telepítés nélküli verzió
 - A `portable` mappában található dll fájlok és a `dotnet` keretrendszer telepítésével futtatható az állomány.
+```
+dotnet APIClient.dll
+```
 
 ## Működése
 - Az alkalmazás elindítása után, a főmenü jelenik meg, ahol 9 menüpont található.
