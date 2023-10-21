@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace APIClient.Internal
@@ -48,6 +49,23 @@ namespace APIClient.Internal
         public bool Closed { get; private set; } = false;
         #endregion
         #region Methods
+        /// <summary>
+        /// Átalakítja a kinyert adatot, JSON formátumba
+        /// </summary>
+        /// <param name="unPrettyJson">Nyers szöveg</param>
+        /// <returns>JSON formátumba tagolt szöveg</returns>
+        public string PrettyJson(string unPrettyJson)
+        {
+            //https://stackoverflow.com/a/63560258/21669857
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            };
+
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
+
+            return JsonSerializer.Serialize(jsonElement, options);
+        }
         /// <summary>
         /// Beállítja a válaszadás kezdő időpontját
         /// </summary>
@@ -114,7 +132,7 @@ namespace APIClient.Internal
                 }
                 sb.AppendLine("Státuszkód: " + Code);
                 sb.AppendLine("\nEredmény:\n");
-                sb.AppendLine(AnswerText);
+                sb.AppendLine(PrettyJson(AnswerText));
                 sb.AppendLine("\n---");
             }
             else
